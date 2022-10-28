@@ -55,7 +55,7 @@ public class ConsumerRunnable implements Runnable {
       String response = "";
       try {
         String liftRideJson = new String(delivery.getBody(), "UTF-8");
-        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
+//        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
 
         // Put skierId and associated liftRide in hashmap
         addSkierIdAndLiftRideToHashMap(liftRideJson);
@@ -78,13 +78,12 @@ public class ConsumerRunnable implements Runnable {
 
   private void addSkierIdAndLiftRideToHashMap(String liftRideJson) {
     Integer skierId = getSkierIdFromLiftRide(liftRideJson);
-//    System.out.println(skierId);
-
     skierIdToLiftRides.computeIfAbsent(skierId, k -> new ArrayList<>());
 
     List<String> liftRides = skierIdToLiftRides.get(skierId);
     liftRides.add(liftRideJson);
-    System.out.println(skierId + ": " + liftRides);
+
+//    System.out.println(skierId + ": " + liftRides);
 
     skierIdToLiftRides.put(skierId, liftRides);
   }
