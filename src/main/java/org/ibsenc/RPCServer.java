@@ -8,12 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class RPCServer {
-  private static final String hostName = "localhost";
+  private static final String LOCAL_HOST_NAME = "localhost";
+  private static final String REMOTE_HOST_NAME = "172.31.31.103";
   private static final Integer NUM_OF_CONSUMER_THREADS = 100;
 
   public static void main(String[] argv) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost(hostName);
+    String rabbitMQHostName = REMOTE_HOST_NAME;
+    factory.setHost(rabbitMQHostName);
     Connection connection = factory.newConnection();
 
     LinkedBlockingQueue<Channel> channelQueue = generateQueueWithChannels(connection);
