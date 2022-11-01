@@ -55,7 +55,7 @@ public class ConsumerRunnable implements Runnable {
       String response = "";
       try {
         String liftRideJson = new String(delivery.getBody(), "UTF-8");
-//        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
+        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
 
         // Put skierId and associated liftRide in hashmap
         addSkierIdAndLiftRideToHashMap(liftRideJson);

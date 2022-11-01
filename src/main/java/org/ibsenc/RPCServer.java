@@ -9,13 +9,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class RPCServer {
   private static final String LOCAL_HOST_NAME = "localhost";
-  private static final String REMOTE_HOST_NAME = "172.31.31.103";
-  private static final Integer NUM_OF_CONSUMER_THREADS = 100;
+  private static final String REMOTE_HOST_NAME_PUBLIC = "100.20.70.143";
+  private static final String REMOTE_HOST_NAME_PRIVATE = "172.31.31.103";
+  private static final Integer NUM_OF_CONSUMER_THREADS = 1000;
 
   public static void main(String[] argv) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    String rabbitMQHostName = REMOTE_HOST_NAME;
+    String rabbitMQHostName = REMOTE_HOST_NAME_PUBLIC;
     factory.setHost(rabbitMQHostName);
+    factory.setUsername("ibsenc");
+    factory.setPassword("password");
+    factory.setVirtualHost("cherry_broker");
     Connection connection = factory.newConnection();
 
     LinkedBlockingQueue<Channel> channelQueue = generateQueueWithChannels(connection);
@@ -29,8 +33,6 @@ public class RPCServer {
       Thread thread = new Thread(consumerRunnable);
       threads.add(thread);
     }
-
-    System.out.println(threads);
 
     // Start threads
     for (Thread thread : threads) {
