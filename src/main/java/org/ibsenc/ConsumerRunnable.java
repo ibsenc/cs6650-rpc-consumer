@@ -60,7 +60,7 @@ public class ConsumerRunnable implements Runnable {
         // Put skierId and associated liftRide in hashmap
         addSkierIdAndLiftRideToHashMap(liftRideJson);
 
-        response += "Processed liftRide with corrId: " + delivery.getProperties().getCorrelationId();
+//        response += "Processed liftRide with corrId: " + delivery.getProperties().getCorrelationId();
       } catch (RuntimeException e) {
         e.printStackTrace();
       } finally {

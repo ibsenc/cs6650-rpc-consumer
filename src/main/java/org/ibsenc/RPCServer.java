@@ -9,13 +9,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class RPCServer {
   private static final String LOCAL_HOST_NAME = "localhost";
-  private static final String REMOTE_HOST_NAME_PUBLIC = "100.20.70.143";
+  private static final String REMOTE_HOST_NAME_ELASTIC = "100.20.70.143";
+//  private static final String REMOTE_HOST_NAME_PUBLIC = "52.25.165.233";
   private static final String REMOTE_HOST_NAME_PRIVATE = "172.31.31.103";
   private static final Integer NUM_OF_CONSUMER_THREADS = 1000;
 
   public static void main(String[] argv) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    String rabbitMQHostName = REMOTE_HOST_NAME_PUBLIC;
+    String rabbitMQHostName = REMOTE_HOST_NAME_ELASTIC;
     factory.setHost(rabbitMQHostName);
     factory.setUsername("ibsenc");
     factory.setPassword("password");
