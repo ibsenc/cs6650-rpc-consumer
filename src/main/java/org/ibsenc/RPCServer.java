@@ -4,8 +4,10 @@ import com.rabbitmq.client.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.ibsenc.assignment3.ConsumerRunnableWithRedis;
+import org.ibsenc.assignment3.RedisClient;
+import redis.clients.jedis.JedisPool;
 
 public class RPCServer {
   private static final String LOCAL_HOST_NAME = "localhost";
@@ -25,13 +27,21 @@ public class RPCServer {
 
     LinkedBlockingQueue<Channel> channelQueue = generateQueueWithChannels(connection);
 
-    ConcurrentHashMap<Integer, List<String>> skierIdToLiftRides = new ConcurrentHashMap<>();
     List<Thread> threads = new ArrayList<>();
-    ConsumerRunnable consumerRunnable = new ConsumerRunnable(skierIdToLiftRides, channelQueue);
+
+    // Assignment 2
+//    ConcurrentHashMap<Integer, List<String>> skierIdToLiftRides = new ConcurrentHashMap<>();
+//    ConsumerRunnable consumerRunnable = new ConsumerRunnable(skierIdToLiftRides, channelQueue);
+
+    // Assignment 3
+    JedisPool jedisPool = new JedisPool(Constants.REDIS_SERVER_PUBLIC_IP, Constants.REDIS_PORT);
+    RedisClient redisClient = new RedisClient(jedisPool);
+    ConsumerRunnableWithRedis consumerRunnableWithRedis = new ConsumerRunnableWithRedis(channelQueue, jedisPool, redisClient);
+
 
     // Create consumer threads
     for (int i = 0; i < NUM_OF_CONSUMER_THREADS; i++) {
-      Thread thread = new Thread(consumerRunnable);
+      Thread thread = new Thread(consumerRunnableWithRedis);
       threads.add(thread);
     }
 

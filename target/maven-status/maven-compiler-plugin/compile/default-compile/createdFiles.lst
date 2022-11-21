@@ -1,3 +1,5 @@
-org/ibsenc/RPCServer.class
+org/ibsenc/RedisClient.class
 org/ibsenc/ConsumerRunnable.class
+org/ibsenc/RPCServer.class
+org/ibsenc/ConsumerRunnableWithRedis.class
 org/ibsenc/Constants.class

@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.ibsenc.assignment3.RedisClient;
+import redis.clients.jedis.JedisPool;
 
 public class ConsumerRunnable implements Runnable {
 
   private static final Integer SKIER_ID_INDEX = 3;
   private ConcurrentHashMap<Integer, List<String>> skierIdToLiftRides;
   private LinkedBlockingQueue channelQueue;
+  private JedisPool jedisPool;
+  private RedisClient redisClient;
 
   public ConsumerRunnable(ConcurrentHashMap<Integer, List<String>> skierIdToLiftRides, LinkedBlockingQueue<Channel> channelQueue) {
     this.skierIdToLiftRides = skierIdToLiftRides;
@@ -55,10 +59,10 @@ public class ConsumerRunnable implements Runnable {
       String response = "";
       try {
         String liftRideJson = new String(delivery.getBody(), "UTF-8");
-        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
+//        System.out.println("Processing liftRide with corrId: " + delivery.getProperties().getCorrelationId());
 
-        // Put skierId and associated liftRide in hashmap
-        addSkierIdAndLiftRideToHashMap(liftRideJson);
+        // Assignment 2: Put skierId and associated liftRide in hashmap
+         addToHashMap(liftRideJson);
 
 //        response += "Processed liftRide with corrId: " + delivery.getProperties().getCorrelationId();
       } catch (RuntimeException e) {
@@ -76,19 +80,25 @@ public class ConsumerRunnable implements Runnable {
     }
   }
 
-  private void addSkierIdAndLiftRideToHashMap(String liftRideJson) {
-    Integer skierId = getSkierIdFromLiftRide(liftRideJson);
+  private void addToHashMap(String liftRideJson) {
+    Integer skierId = getSkierId(liftRideJson);
+    List<String> liftRides = getLiftRidesAssociatedWithSkierID(skierId, liftRideJson);
+
+    skierIdToLiftRides.put(skierId, liftRides);
+  }
+
+  private List<String> getLiftRidesAssociatedWithSkierID(Integer skierId, String liftRideJson) {
     skierIdToLiftRides.computeIfAbsent(skierId, k -> new ArrayList<>());
 
     List<String> liftRides = skierIdToLiftRides.get(skierId);
     liftRides.add(liftRideJson);
 
-//    System.out.println(skierId + ": " + liftRides);
+    System.out.println(skierId + ": " + liftRides);
 
-    skierIdToLiftRides.put(skierId, liftRides);
+    return liftRides;
   }
 
-  private Integer getSkierIdFromLiftRide(String liftRideJson) {
+  private Integer getSkierId(String liftRideJson) {
     String[] jsonFields = liftRideJson.split(",");
     String[] skierIdLabelAndValue = jsonFields[SKIER_ID_INDEX].split(":");
 
