@@ -4,6 +4,7 @@ import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.ibsenc.Constants;
 import redis.clients.jedis.JedisPool;
@@ -60,7 +61,8 @@ public class ConsumerRunnableWithRedis implements Runnable {
 
         // Assignment 3: Put skierID and associated liftRide in the DB
           String skierID = getSkierId(liftRideJson).toString();
-          redisClient.put(skierID, liftRideJson);
+          String key = UUID.randomUUID().toString();
+          redisClient.put(key, liftRideJson);
 //          redisClient.get(skierID);
 
 

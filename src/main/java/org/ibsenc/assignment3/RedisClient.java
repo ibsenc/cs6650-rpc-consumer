@@ -30,7 +30,7 @@ public class RedisClient {
 
   public void put(String key, String value) {
     try (Jedis jedis = jedisPool.getResource()) {
-//      System.out.println(String.format("Adding key: %s, value: %s", key, value));
+      System.out.println(String.format("Adding key: %s, value: %s", key, value));
       jedis.set(key, value);
     } catch (Exception e) {
       e.printStackTrace();
