@@ -34,7 +34,7 @@ public class RPCServer {
 //    ConsumerRunnable consumerRunnable = new ConsumerRunnable(skierIdToLiftRides, channelQueue);
 
     // Assignment 3
-    JedisPool jedisPool = new JedisPool(Constants.REDIS_SERVER_PUBLIC_IP, Constants.REDIS_PORT);
+    JedisPool jedisPool = new JedisPool(Constants.REDIS_SERVER_ELASTIC_IP, Constants.REDIS_PORT);
     RedisClient redisClient = new RedisClient(jedisPool);
     ConsumerRunnableWithRedis consumerRunnableWithRedis = new ConsumerRunnableWithRedis(channelQueue, jedisPool, redisClient);
 
